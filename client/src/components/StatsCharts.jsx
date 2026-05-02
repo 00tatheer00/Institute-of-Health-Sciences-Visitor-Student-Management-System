@@ -13,6 +13,7 @@ import {
   Legend
 } from 'recharts';
 import { API_BASE } from '../config.js';
+import { readApiJson } from '../utils/readApiJson.js';
 
 const COLORS = ['#7c3aed', '#ec4899', '#06b6d4'];
 
@@ -39,7 +40,7 @@ const StatsCharts = () => {
     const fetchChart = async () => {
       try {
         const res = await fetch(`${API_BASE}/reports/chart`);
-        const data = await res.json();
+        const data = await readApiJson(res);
         if (res.ok && Array.isArray(data) && data.length > 0) {
           setChartData(data);
         } else {

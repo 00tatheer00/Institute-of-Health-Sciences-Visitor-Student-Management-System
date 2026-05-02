@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Users, ClipboardList, ScanLine, AlertTriangle } from 'lucide-react';
 import { API_BASE } from '../config.js';
+import { readApiJson } from '../utils/readApiJson.js';
 
 const DashboardMetrics = () => {
   const [stats, setStats] = useState(null);
@@ -11,7 +12,7 @@ const DashboardMetrics = () => {
     const fetchStats = async () => {
       try {
         const res = await fetch(`${API_BASE}/reports/today`);
-        const data = await res.json();
+        const data = await readApiJson(res);
         if (res.ok) {
           setStats(data);
           setApiError(false);
@@ -52,7 +53,12 @@ const DashboardMetrics = () => {
       {apiError && (
         <div className="api-status-banner" role="alert">
           <AlertTriangle className="api-status-icon" size={20} strokeWidth={2} />
-          <span>Unable to connect to server. Please ensure the backend is running (<code>cd backend && npm start</code>).</span>
+          <span>
+            Unable to reach the API. Locally run <code>cd backend && npm start</code>. On Vercel, deploy the backend
+            elsewhere (e.g. Render/Railway), set <code>VITE_API_URL</code> to that server&apos;s base URL (no{' '}
+            <code>/api</code> suffix needed), add your site URL to backend <code>ALLOWED_ORIGINS</code>, then redeploy
+            the frontend.
+          </span>
         </div>
       )}
       <div className="metrics-row">

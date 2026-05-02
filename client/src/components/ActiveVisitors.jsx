@@ -3,6 +3,7 @@ import { Check, LogOut } from 'lucide-react';
 import { SkeletonTable } from './Skeleton.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import { API_BASE } from '../config.js';
+import { readApiJson } from '../utils/readApiJson.js';
 
 const ActiveVisitors = () => {
   const { addToast } = useToast();
@@ -15,12 +16,17 @@ const ActiveVisitors = () => {
     setStatus(null);
     try {
       const res = await fetch(`${API_BASE}/visitors/active`);
-      const data = await res.json();
+      const data = await readApiJson(res);
       if (!res.ok) throw new Error(data.message || 'Failed to load active visitors');
       setVisitors(data);
     } catch (err) {
-      setStatus({ type: 'error', message: err.message || 'Failed to load visitors' });
-      addToast({ message: err.message || 'Failed to load visitors', type: 'error', size: 'small' });
+      let message = err instanceof Error ? err.message : 'Failed to load visitors';
+      if (/unexpected token|not valid json/i.test(message)) {
+        message =
+          'Cannot reach the API. Deploy the backend, set VITE_API_URL on Vercel to its URL, and redeploy.';
+      }
+      setStatus({ type: 'error', message });
+      addToast({ message, type: 'error', size: 'small' });
     } finally {
       setInitialLoad(false);
     }
@@ -37,7 +43,7 @@ const ActiveVisitors = () => {
       const res = await fetch(`${API_BASE}/visitors/${id}/check-out`, {
         method: 'POST'
       });
-      const data = await res.json();
+      const data = await readApiJson(res);
       if (!res.ok) throw new Error(data.message || 'Failed to check out');
       setStatus({ type: 'success', message: 'Visitor checked out.' });
       addToast({ message: 'Visitor checked out', type: 'success', size: 'small' });
