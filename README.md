@@ -1,122 +1,90 @@
-# Institute of Health Sciences – Visitor & Student Entry Management System
+# Institute of Health Sciences — Visitor & Student Entry Management System
 
-A modern web application for managing visitor check-in/check-out and student entry via QR/barcode scanning at the Institute of Health Sciences.
+A web application for reception and administration teams to manage visitor check-in/check-out and student entry records at the Institute of Health Sciences.
 
----
+## Capabilities
 
-## Overview
+- **Visitor check-in and check-out:** Record visitor details, visitor type, purpose, person to meet, and visit times.
+- **Visitor badges:** Generate printable visitor badges after check-in.
+- **Student entry scanning:** Record student entry with a USB QR/barcode scanner or a laptop camera.
+- **Student registration:** Register students individually or import CSV, JSON, and Excel files.
+- **Dashboards:** View active visitors, today's visitors, student entries, and recent trends.
+- **Reports and exports:** Search visitor logs, review student entry logs, and export records.
+- **Administration:** Manage student records and application settings, including card themes.
 
-The system provides:
+## Technology
 
-- **Visitor Management** – Check-in with CNIC, purpose, person to meet; check-out tracking
-- **Student Entry** – QR/barcode scanning (USB scanner or laptop camera)
-- **Dashboard** – Live metrics, charts, peak hours, popular purposes, most visited departments
-- **Admin** – Visitor logs, student registration, bulk import, reports, export
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-------------|
-| Frontend | React 18, Vite |
-| Backend | Node.js, Express |
-| Database | MongoDB |
+| Layer | Stack |
+|---|---|
+| Frontend | React 18, Vite 5 |
+| Backend | Node.js, Express 4 |
+| Database | MongoDB, Mongoose |
 | Charts | Recharts |
+| QR scanning | html5-qrcode |
+| Spreadsheet import | xlsx |
 
----
-
-## Quick Start
-
-### Prerequisites
+## Requirements
 
 - Node.js 18+
+- npm
 - MongoDB (local or remote)
 
-### 1. Backend
+## Local setup
+
+Install the backend and frontend dependencies from the repository root:
 
 ```bash
-cd backend
-npm install
-npm start
+git clone https://github.com/00tatheer00/Institute-of-Health-Sciences-Visitor-Student-Management-System.git
+cd Institute-of-Health-Sciences-Visitor-Student-Management-System
+npm run install:all
 ```
 
-Runs at **http://localhost:5000**
+Configure the backend environment before starting the API. Create `backend/.env` and set:
 
-### 2. Frontend
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/ihs-visitor-management
+NODE_ENV=development
+```
+
+If the frontend needs a separate API base URL, configure `VITE_API_URL` in the client environment according to the deployment environment.
+
+Run the backend and frontend in separate terminals:
+
+Terminal 1:
 
 ```bash
-cd client
-npm install
-npm start
+npm run backend
 ```
 
-Runs at **http://localhost:3000**
+Terminal 2:
 
-### 3. Admin Access
-
-- Go to **Admin Dashboard** → **Login**
-- Default credentials: `admin` / `admin123` (change in production)
-
----
-
-## Features
-
-| Feature | Description |
-|---------|-------------|
-| Visitor Check-In | Form with type, purpose, person to meet; badge printing |
-| Active Visitors | Check-out table with auto-refresh |
-| Student Scanner | USB QR scanner + camera scanning |
-| Dashboard Metrics | Active visitors, today's count, student entries |
-| Charts | 7-day visit & entry statistics |
-| Bulk Student Import | CSV/JSON import |
-| Visitor Logs | Filter, search, export CSV |
-| Dark Mode | Toggle in top bar |
-
----
-
-## Project Structure
-
-```
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # UI components
-│   │   ├── context/       # Toast context
-│   │   └── config.js      # API config
-│   └── index.html
-├── backend/               # Express API
-│   ├── models/            # Mongoose models
-│   ├── routes/            # API routes
-│   └── index.js
+```bash
+npm run client
 ```
 
----
+The backend listens on port 5000. The Vite development server uses port 3000 as configured in the project.
 
-## Configuration
+## Useful scripts
 
-- **API URL**: Set `VITE_API_URL` in `.env` for production (e.g. `https://api.yourserver.com`)
-- **MongoDB**: Set `MONGO_URI` in backend env for remote DB
-
----
+| Command | Purpose |
+|---|---|
+| `npm run install:all` | Install backend and frontend dependencies |
+| `npm run backend` | Start the Express API |
+| `npm run client` | Start the Vite development server |
+| `npm run build` | Build the frontend for production |
 
 ## Documentation
 
-See [FEATURES.md](./FEATURES.md) for detailed feature usage.
+See [FEATURES.md](./FEATURES.md) for step-by-step instructions for visitor badges, bulk student import, QR scanning, dashboards, and reports.
 
----
+## Security and deployment
 
-## Demo Checklist (for Presentation)
+- Do not commit `.env` files or production database credentials.
+- Replace development/demo administrator credentials before deployment.
+- Configure CORS, session/authentication settings, and the database for the target environment.
+- The repository contains a generated `client/dist/` folder in Git history. Keep future build output out of version control; rebuild it with `npm run build` when needed.
 
-Before presenting to HOD, ensure:
+## License
 
-1. **MongoDB** is running
-2. **Backend**: `cd backend && npm start` (port 5000)
-3. **Frontend**: `cd client && npm start` (port 3000)
-4. Open **http://localhost:3000** in browser
-
-**Suggested demo flow:**
-
-1. **Reception** – Check in a visitor, show badge print, check out
-2. **Student Scanner** – Scan QR (USB or camera)
-3. **Dashboard** – Show metrics and charts
-4. **Admin** – Login (admin/admin123), show visitor logs, bulk import, export
+No license file was identified during this documentation review. Confirm the intended license before redistributing or reusing the project.
