@@ -39,17 +39,18 @@ cd Institute-of-Health-Sciences-Visitor-Student-Management-System
 npm run install:all
 ```
 
-Configure the backend environment before starting the API. Create `backend/.env` and set:
+Configure backend environment variables in your shell or hosting provider. Use [backend/.env.example](./backend/.env.example) as the variable reference:
 
 ```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/ihs-visitor-management
-NODE_ENV=development
+SESSION_SECRET=replace-with-a-long-random-secret
+ALLOWED_ORIGINS=http://localhost:3000
 ```
 
-If the frontend needs a separate API base URL, configure `VITE_API_URL` in the client environment according to the deployment environment.
+The backend currently reads environment variables from the process environment; it does not load a `.env` file itself. If you prefer local `.env` loading, add and configure a dotenv loader before relying on that file.
 
-Run the backend and frontend in separate terminals:
+Run the backend and frontend in separate terminals.
 
 Terminal 1:
 
@@ -63,7 +64,8 @@ Terminal 2:
 npm run client
 ```
 
-The backend listens on port 5000. The Vite development server uses port 3000 as configured in the project.
+- Backend API: [http://localhost:5000](http://localhost:5000)
+- Frontend: [http://localhost:3000](http://localhost:3000)
 
 ## Useful scripts
 
@@ -81,8 +83,9 @@ See [FEATURES.md](./FEATURES.md) for step-by-step instructions for visitor badge
 ## Security and deployment
 
 - Do not commit `.env` files or production database credentials.
+- Set a unique, high-entropy `SESSION_SECRET` in every deployed environment. The current backend source contains a development fallback; do not rely on that fallback in production.
 - Replace development/demo administrator credentials before deployment.
-- Configure CORS, session/authentication settings, and the database for the target environment.
+- Configure CORS using `ALLOWED_ORIGINS` for the exact frontend origins you trust.
 - The repository contains a generated `client/dist/` folder in Git history. Keep future build output out of version control; rebuild it with `npm run build` when needed.
 
 ## License
